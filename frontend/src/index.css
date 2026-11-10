@@ -1,0 +1,227 @@
+@import 'tailwindcss';
+
+/*
+ * Class-based dark mode. ThemeContext toggles `dark` on <html>.
+ * Mapping the palette through CSS variables on :root / .dark means a single
+ * set of semantic utilities (bg-surface, text-muted, border-line) works in
+ * both themes, and switching themes never needs component-level conditionals.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --tf-app: #f7f8fc;
+  --tf-surface: #ffffff;
+  --tf-surface-2: #f1f3fa;
+  --tf-line: #e4e7f1;
+  --tf-ink: #0f172a;
+  --tf-muted: #5b6579;
+  --tf-brand: #4f46e5;
+  --tf-brand-hover: #4338ca;
+  --tf-brand-soft: #eef2ff;
+  --tf-success: #15803d;
+  --tf-success-soft: #dcfce7;
+  --tf-warning: #b45309;
+  --tf-warning-soft: #fef3c7;
+  --tf-danger: #b91c1c;
+  --tf-danger-soft: #fee2e2;
+  color-scheme: light;
+}
+
+.dark {
+  --tf-app: #0b0e15;
+  --tf-surface: #111724;
+  --tf-surface-2: #18202f;
+  --tf-line: #253044;
+  --tf-ink: #e7ebf3;
+  --tf-muted: #93a0b5;
+  --tf-brand: #818cf8;
+  --tf-brand-hover: #a5b4fc;
+  --tf-brand-soft: #1e1b4b;
+  --tf-success: #4ade80;
+  --tf-success-soft: #052e16;
+  --tf-warning: #fbbf24;
+  --tf-warning-soft: #3b2606;
+  --tf-danger: #f87171;
+  --tf-danger-soft: #450a0a;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-app: var(--tf-app);
+  --color-surface: var(--tf-surface);
+  --color-surface-2: var(--tf-surface-2);
+  --color-line: var(--tf-line);
+  --color-ink: var(--tf-ink);
+  --color-muted: var(--tf-muted);
+  --color-brand: var(--tf-brand);
+  --color-brand-hover: var(--tf-brand-hover);
+  --color-brand-soft: var(--tf-brand-soft);
+  --color-success: var(--tf-success);
+  --color-success-soft: var(--tf-success-soft);
+  --color-warning: var(--tf-warning);
+  --color-warning-soft: var(--tf-warning-soft);
+  --color-danger: var(--tf-danger);
+  --color-danger-soft: var(--tf-danger-soft);
+
+  --radius-card: 1rem;
+  --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12);
+  --shadow-lift: 0 18px 40px -18px rgb(15 23 42 / 0.28);
+
+  --animate-fade-in: fade-in 0.35s ease-out both;
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-scale-in: scale-in 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-float: float 7s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-app font-sans text-ink antialiased;
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background: var(--tf-brand);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--tf-brand);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-card border border-line bg-surface shadow-soft;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition duration-150 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-primary {
+    @apply bg-brand text-white shadow-soft hover:bg-brand-hover active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply border border-line bg-surface text-ink hover:bg-surface-2;
+  }
+
+  .btn-ghost {
+    @apply text-muted hover:bg-surface-2 hover:text-ink;
+  }
+
+  .btn-danger {
+    @apply bg-danger text-white hover:opacity-90 active:scale-[0.98];
+  }
+
+  .btn-sm {
+    @apply rounded-lg px-3 py-2 text-xs;
+  }
+
+  .icon-btn {
+    @apply inline-flex size-9 items-center justify-center rounded-lg text-muted transition hover:bg-surface-2 hover:text-ink disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-ink transition placeholder:text-muted/70 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink;
+  }
+
+  .field-error {
+    @apply mt-1.5 text-xs font-medium text-danger;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded-lg bg-surface-2;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted transition hover:bg-surface-2 hover:text-ink;
+  }
+
+  .sidebar-link-active {
+    @apply bg-brand-soft text-brand hover:bg-brand-soft hover:text-brand;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
